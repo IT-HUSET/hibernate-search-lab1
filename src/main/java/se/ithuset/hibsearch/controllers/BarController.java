@@ -36,4 +36,9 @@ public class BarController {
     public List<Bar> findAllBars() {
         return service.findAll();
     }
+
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public List<Bar> search() {
+        return service.search();
+    }
 }

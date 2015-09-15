@@ -8,4 +8,7 @@ public interface BarService {
     void createBar(Bar bar);
 
     List<Bar> findAll();
+
+    List<Bar> search();
+
 }

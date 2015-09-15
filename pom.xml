@@ -24,6 +24,7 @@
 
         <hikari.version>2.4.1</hikari.version>
         <h2.version>1.4.189</h2.version>
+        <hibernate-search.version>5.3.0.Final</hibernate-search.version>
     </properties>
 
     <dependencies>
@@ -60,11 +61,11 @@
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.hibernate</groupId>-->
-        <!--<artifactId>hibernate-search</artifactId>-->
-        <!--<version>5.3.0.Final</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-search</artifactId>
+            <version>${hibernate-search.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>com.zaxxer</groupId>

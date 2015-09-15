@@ -24,4 +24,9 @@ public class BarServiceImpl implements BarService {
     public List<Bar> findAll() {
         return dao.findAll();
     }
+
+    @Override
+    public List<Bar> search() {
+        return dao.search();
+    }
 }

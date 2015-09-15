@@ -1,5 +1,9 @@
 package se.ithuset.hibsearch.domain;
 
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.IndexedEmbedded;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -11,24 +15,29 @@ import java.util.Set;
  */
 @SuppressWarnings("unused")
 @Entity
+@Indexed
 public class Bar implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
     private Long barId;
 
+    @Field
     private String name;
 
+    @Field
     private String description;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
+    @IndexedEmbedded(depth = 1)
     private Address address;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "BAR_P_BEER",
             joinColumns = {@JoinColumn(name = "bar_id")},
             inverseJoinColumns = {@JoinColumn(name = "beer_id")})
+    @IndexedEmbedded(depth = 1)
     private Set<Beer> beers = new HashSet<>();
 
     private int rating;

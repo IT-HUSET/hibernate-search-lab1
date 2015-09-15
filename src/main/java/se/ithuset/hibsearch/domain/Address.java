@@ -1,6 +1,8 @@
 package se.ithuset.hibsearch.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.search.annotations.ContainedIn;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,12 +21,18 @@ public class Address implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @NotNull
     private Long addressId;
+
+    @Field
     private String addressRow;
+
     private String zipCode;
+
+    @Field
     private String city;
 
-    @OneToMany(mappedBy = "address")
     @JsonIgnore
+    @OneToMany(mappedBy = "address")
+    @ContainedIn
     private Set<Bar> bars = new HashSet<>();
 
     public Address() {

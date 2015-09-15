@@ -1,6 +1,8 @@
 package se.ithuset.hibsearch.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.search.annotations.ContainedIn;
+import org.hibernate.search.annotations.Field;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -19,12 +21,15 @@ public class Beer implements Serializable {
     @NotNull
     private Long beerId;
 
+    @Field
     private String name;
 
+    @Field
     private String description;
 
     @JsonIgnore
     @ManyToMany(mappedBy = "beers", fetch = FetchType.LAZY)
+    @ContainedIn
     private Set<Bar> bars = new HashSet<>();
 
     public Beer() {
