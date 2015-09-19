@@ -20,10 +20,10 @@ public class BarController {
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public HttpStatus addBar() {
-        Beer beer = new Beer("Apan", "Smarrig APA");
-        Address address = new Address("Apstigen 1", "111 30", "Sthlm");
+        Beer beer = new Beer("Punk IPA", "Nice IPA");
+        Address address = new Address("S:t Eriksg. 56 A", "112 34", "Stockholm");
 
-        Bar bar = new Bar("Baren", "Trevliga baren", 4);
+        Bar bar = new Bar("Brewdog Sthlm", "At the epicentre of the mainstream lager scene, BrewDog Kungsholmen is the hop-flecked, full-throttle alternative. Drop by, give us a hearty 'hej!' and enjoy the best selection of craft beer in the city.", 4, 59.336422, 18.034675);
         bar.addAddress(address);
         bar.addBeer(beer);
 

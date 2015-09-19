@@ -1,7 +1,10 @@
 package se.ithuset.hibsearch.dao;
 
+import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.jpa.FullTextEntityManager;
+import org.hibernate.search.query.dsl.BooleanJunction;
 import org.hibernate.search.query.dsl.QueryBuilder;
+import org.hibernate.search.query.dsl.Unit;
 import org.springframework.stereotype.Repository;
 import se.ithuset.hibsearch.domain.Bar;
 
@@ -11,6 +14,7 @@ import java.util.List;
 
 @Repository
 public class BarDaoImpl implements BarDao {
+    public static final int MAX_DISTANCE = 50;
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -28,35 +32,45 @@ public class BarDaoImpl implements BarDao {
 
     @Override
     public List<Bar> search() {
-        return search("Sthln");
+        return search("Punk", 59.339865, 18.058047);
     }
 
     @SuppressWarnings("unchecked")
-    public List<Bar> search(String token) {
-        // get the full text entity manager
+    public List<Bar> search(String token, Double latitude, Double longitude) {
         FullTextEntityManager fullTextEntityManager =
                 org.hibernate.search.jpa.Search.
                         getFullTextEntityManager(entityManager);
 
-        // create the query using Hibernate Search query DSL
         QueryBuilder queryBuilder =
                 fullTextEntityManager.getSearchFactory()
                         .buildQueryBuilder().forEntity(Bar.class).get();
 
-        // a very basic query by keywords
-        org.apache.lucene.search.Query query =
-                queryBuilder
-                        .keyword()
-                        .fuzzy()
-                        .onFields("name", "description", "beers.name", "beers.description", "address.addressRow", "address.city")
-                        .matching(token)
-                        .createQuery();
 
-        // wrap Lucene query in an Hibernate Query object
+        BooleanJunction<BooleanJunction> bool = queryBuilder.bool();
+
+        bool.must(queryBuilder
+                .keyword()
+                .fuzzy()
+                .onFields("name", "description", "beers.name", "beers.description", "address.addressRow", "address.city")
+                .matching(token)
+                .createQuery());
+
+        if (latitude != null && longitude != null) {
+            bool.must(queryBuilder
+                    .spatial()
+                    .onField("location") // .location")
+                    .within(MAX_DISTANCE, Unit.KM)
+                    .ofLatitude(latitude)
+                    .andLongitude(longitude)
+                    .createQuery());
+        }
+
         org.hibernate.search.jpa.FullTextQuery jpaQuery =
-                fullTextEntityManager.createFullTextQuery(query, Bar.class);
+                fullTextEntityManager.createFullTextQuery(bool.createQuery(), Bar.class);
+        jpaQuery.setProjection(FullTextQuery.SPATIAL_DISTANCE, FullTextQuery.THIS);
+        jpaQuery.setSpatialParameters(latitude, longitude, "location");
 
-        // execute search and return results (sorted by relevance as default)
+
         @SuppressWarnings("unchecked")
         List results = jpaQuery.getResultList();
 

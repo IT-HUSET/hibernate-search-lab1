@@ -15,6 +15,7 @@ import java.util.Set;
  */
 @SuppressWarnings("unused")
 @Entity
+//@Spatial //(name = "location")
 public class Address implements Serializable {
 
     @Id
@@ -29,6 +30,12 @@ public class Address implements Serializable {
 
     @Field
     private String city;
+//
+//    @Latitude //(of = "location")
+//    private Double latitude;
+//
+//    @Longitude //(of = "location")
+//    private Double longitude;
 
     @JsonIgnore
     @OneToMany(mappedBy = "address")
@@ -42,6 +49,8 @@ public class Address implements Serializable {
         this.addressRow = addressRow;
         this.zipCode = zipCode;
         this.city = city;
+        // this.latitude = latitude;
+        //  this.longitude = longitude;
     }
 
     public Long getAddressId() {
@@ -75,6 +84,22 @@ public class Address implements Serializable {
     public void setCity(String city) {
         this.city = city;
     }
+
+//    public Double getLatitude() {
+//        return latitude;
+//    }
+//
+//    public void setLatitude(Double latitude) {
+//        this.latitude = latitude;
+//    }
+//
+//    public Double getLongitude() {
+//        return longitude;
+//    }
+//
+//    public void setLongitude(Double longitude) {
+//        this.longitude = longitude;
+//    }
 
     public Set<Bar> getBars() {
         return bars;
