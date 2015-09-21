@@ -20,6 +20,6 @@ public class BarDaoImpl implements BarDao {
     @SuppressWarnings("unchecked")
     @Override
     public List<Bar> findAll() {
-        return entityManager.createQuery("from Bar").getResultList();
+        return entityManager.createQuery("select b from Bar b").getResultList();
     }
 }
